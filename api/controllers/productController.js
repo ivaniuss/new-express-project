@@ -3,7 +3,13 @@ const { Product } = db;
 
 export const createProduct = async (req, res) => {
   try {
-    const product = await Product.create(req.body);
+    const { name, price, description } = req.body;
+    const product = await Product.create({
+      name,
+      price,
+      description,
+      userId: req.user.userId
+    });
     res.status(201).json(product);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -34,8 +40,9 @@ export const getProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   try {
-    const [updated] = await Product.update(req.body, {
-      where: { id: req.params.id }
+    const { name, price, description } = req.body;
+    const [updated] = await Product.update({ name, price, description }, {
+      where: { id: req.params.id, userId: req.user.userId }
     });
     if (updated) {
       const updatedProduct = await Product.findByPk(req.params.id);
@@ -51,7 +58,7 @@ export const updateProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
   try {
     const deleted = await Product.destroy({
-      where: { id: req.params.id }
+      where: { id: req.params.id, userId: req.user.userId }
     });
     if (deleted) {
       res.status(204).json();
@@ -65,7 +72,7 @@ export const deleteProduct = async (req, res) => {
 
 export const deleteAllProducts = async (req, res) => {
   try {
-    await Product.destroy({ where: {}, truncate: true });
+    await Product.destroy({ where: { userId: req.user.userId }, truncate: true });
     res.status(204).json();
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -79,7 +86,8 @@ export const loadTestProducts = async (req, res) => {
       testProducts.push({
         name: `Test Product ${i + 1}`,
         price: (Math.random() * 100).toFixed(2),
-        description: `Description for test product ${i + 1}`
+        description: `Description for test product ${i + 1}`,
+        userId: req.user.userId
       });
     }
     await Product.bulkCreate(testProducts);

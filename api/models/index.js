@@ -17,17 +17,23 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
 
 const db = {};
 db.sequelize = sequelize;
-const Product = ProductModel(sequelize);
+
 const User = UserModel(sequelize);
-db.Product = Product;
+const Product = ProductModel(sequelize);
+
 db.User = User;
+db.Product = Product;
 
 db.User.hasMany(db.Product, { as: 'products', foreignKey: 'userId' });
 db.Product.belongsTo(db.User, { as: 'user', foreignKey: 'userId' });
 
-sequelize.sync({ force: false })
-  .then(() => {
-    console.log('Database & tables created!');
-  });
+(async () => {
+  try {
+    await sequelize.sync({ force: false }); 
+    console.log('Database & tables synchronized!');
+  } catch (error) {
+    console.error('Error synchronizing tables:', error);
+  }
+})();
 
 export default db;

@@ -14,12 +14,11 @@ const Product = (sequelize) => {
       type: DataTypes.TEXT,
       allowNull: true
     },
-    // Este es el campo que referencia al usuario
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'User',
+        model: 'Users',
         key: 'id'
       }
     }

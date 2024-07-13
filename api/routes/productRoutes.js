@@ -11,7 +11,6 @@ import {
 import { authorize } from '../middleware/authMiddleware.js';
 
 const router = Router();
-
 router.post('/', authorize, createProduct);
 router.get('/', authorize, getProducts);
 router.get('/:id', authorize, getProduct);

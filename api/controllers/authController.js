@@ -1,6 +1,7 @@
 // authController.js
 import bcrypt from 'bcryptjs';
 import { generateToken } from '../middleware/authMiddleware.js';
+import db from '../models/index.js';
 const { User } = db;
 
 export const createUser = async (req, res) => {
@@ -13,7 +14,6 @@ export const createUser = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log('credentials', username, hashedPassword);
     const newUser = await User.create({
       username,
       password: hashedPassword
