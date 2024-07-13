@@ -1,0 +1,239 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Product API",
+    "description": "API for CRUD operations on products and user authentication"
+  },
+  "host": "localhost:3000",
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "User signup and login"
+    },
+    {
+      "name": "Products",
+      "description": "CRUD operations for products"
+    }
+  ],
+  "schemes": ["http"],
+  "paths": {
+    "/auth/signup": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "User signup",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User signed up successfully"
+          },
+          "400": {
+            "description": "Invalid input or user already exists"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "User login",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User logged in successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/products": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Get all products",
+        "responses": {
+          "200": {
+            "description": "List of products",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Product" }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Products"],
+        "summary": "Create a new product",
+        "parameters": [
+          {
+            "name": "product",
+            "in": "body",
+            "description": "Product to create",
+            "schema": { "$ref": "#/definitions/Product" }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Product created",
+            "schema": { "$ref": "#/definitions/Product" }
+          }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Get a product by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product details",
+            "schema": { "$ref": "#/definitions/Product" }
+          },
+          "404": {
+            "description": "Product not found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Products"],
+        "summary": "Update a product by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "product",
+            "in": "body",
+            "description": "Updated product",
+            "schema": { "$ref": "#/definitions/Product" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product updated",
+            "schema": { "$ref": "#/definitions/Product" }
+          },
+          "404": {
+            "description": "Product not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Products"],
+        "summary": "Delete a product by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Product deleted"
+          },
+          "404": {
+            "description": "Product not found"
+          }
+        }
+      }
+    },
+    "/products/load-test-products": {
+      "post": {
+        "tags": ["Products"],
+        "summary": "Load 50 test products",
+        "responses": {
+          "201": {
+            "description": "Test products loaded"
+          }
+        }
+      }
+    },
+    "/products/delete-all": {
+      "delete": {
+        "tags": ["Products"],
+        "summary": "Delete all products",
+        "responses": {
+          "204": {
+            "description": "All products deleted"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Product": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
