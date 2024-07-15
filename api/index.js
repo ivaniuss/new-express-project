@@ -9,9 +9,15 @@ dotenv.config();
 
 const app = express();
 
-app.use(express.json());
+const corsOptions = {
+  origin: '*', 
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  allowedHeaders: 'Content-Type, Authorization',
+  credentials: true, 
+};
 
-app.use(cors());
+app.use(cors(corsOptions));
+app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/products', productRoutes);
 app.use('/api/auth', authRoutes);
