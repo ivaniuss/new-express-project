@@ -33,7 +33,6 @@ export const swaggerDocument = {
       },
     },
     schemas: {
-      // Incluye tus definiciones aquí
       ...definitions,
     },
   },

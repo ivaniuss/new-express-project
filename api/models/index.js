@@ -4,7 +4,8 @@ import UserModel from './user.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
+// const sequelize = new Sequelize(process.env.DATABASE_URL, {
+const sequelize = new Sequelize("postgres://default:vPCJV5yiA6en@ep-flat-sun-a4e4e1aj.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require", {
   dialect: 'postgres',
   protocol: 'postgres',
   dialectOptions: {
